@@ -318,6 +318,7 @@ class container : public container_base, public radius_mono {
 			fclose(fp);
 		}
 		void compute_all_cells();
+		void compute_cell_data();
 		double sum_cell_volumes();
 		/** Dumps particle IDs and positions to a file.
 		 * \param[in] vl the loop class to use.

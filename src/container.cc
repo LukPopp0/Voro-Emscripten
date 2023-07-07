@@ -439,6 +439,10 @@ void container::compute_all_cells() {
 	while(vl.inc());
 }
 
+void container::compute_cell_data() {
+	
+}
+
 /** Computes all of the Voronoi cells in the container, but does nothing
  * with the output. It is useful for measuring the pure computation time
  * of the Voronoi algorithm, without any additional calculations such as
