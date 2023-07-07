@@ -17,8 +17,9 @@ const points = [
   [1.974399169327309, 4.99995, 0.6252871464344901],
 ];
 
-const voro = await createVoro();
+const Voro = await createVoro();
 
-const pointStorage = new voro.PointStorage();
+const container = new Voro.Container(-5, 5, -5, 5, -5, 5, 2, 2, 2);
+const pointStorage = new Voro.PointStorage();
 points.forEach((p) => pointStorage.addPoint(p[0], p[1], p[2]));
-voro.computeVoroCells(pointStorage, -10, 10, -10, 10, -10, 10, 2, 2, 2);
+container.computeVoroCells(pointStorage);
