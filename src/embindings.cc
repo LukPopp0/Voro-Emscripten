@@ -1,5 +1,9 @@
 #include "voro++.hh"
+
+#ifdef EMSCRIPTEN
 #include <emscripten/bind.h>
+#endif
+
 #include <iostream>
 #include <vector>
 
@@ -9,7 +13,9 @@ public:
   ~PointStorage() { _data.clear(); }
   std::vector<float> _data;
   void add_point(float x, float y, float z) {
-    _data.insert(_data.end(), {x, y, z});
+    _data.push_back(x);
+    _data.push_back(y);
+    _data.push_back(z);
   }
 
   void add_points(std::vector<float> pts) {
@@ -36,7 +42,7 @@ public:
       : x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max), z_min(z_min),
         z_max(z_max), n_x(n_x), n_y(n_y), n_z(n_z) {}
 
-  void compute_voro_cells(PointStorage points) {
+  void compute_cells(PointStorage points) {
     const int init_mem = 8;
 
     voro::container con(x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z,
@@ -44,7 +50,7 @@ public:
 
     assert(points._data.size() % 3 == 0);
 
-    for (int i = 0; i < points._data.size() / 3; ++i) {
+    for (int i = 0; i < int(points._data.size() / 3); ++i) {
       std::cout << "Adding: " << points._data[i * 3 + 0] << " \t"
                 << points._data[i * 3 + 1] << " \t" << points._data[i * 3 + 2]
                 << std::endl;
@@ -52,7 +58,13 @@ public:
               points._data[i * 3 + 2]);
     }
 
-    return con.compute_cell_data();
+    // con.print_custom("%i | %q | %s | %t | %p", "output.txt");
+    std::vector<CellExport> cells;
+    con.compute_cell_data(cells);
+
+    for(auto cell : cells) {
+      std::cout << cell.particleID << " " << cell.nFaces << std::endl;
+    }
   }
 };
 
@@ -76,7 +88,7 @@ EMSCRIPTEN_BINDINGS(vorojs) {
       .property("nX", &Container::n_x)
       .property("nY", &Container::n_y)
       .property("nZ", &Container::n_z)
-      .function("computeVoroCells", &Container::compute_voro_cells);
+      .function("computeCells", &Container::compute_cells);
 }
 #endif
 

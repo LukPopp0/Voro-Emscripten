@@ -320,6 +320,7 @@
 #include "config.hh"
 #include "common.hh"
 #include "cell.hh"
+#include "cell_export.hh"
 #include "v_base.hh"
 #include "rad_option.hh"
 #include "container.hh"

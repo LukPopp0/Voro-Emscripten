@@ -20,6 +20,7 @@
 #include "c_loops.hh"
 #include "v_compute.hh"
 #include "rad_option.hh"
+#include "cell_export.hh"
 
 namespace voro {
 
@@ -423,6 +424,44 @@ class container : public container_base, public radius_mono {
 			FILE *fp=safe_fopen(filename,"w");
 			draw_cells_pov(fp);
 			fclose(fp);
+		}
+		/** Computes the cell data and return it as a list of cells. */
+		void compute_cell_data(std::vector<CellExport>& cells) {
+			int ijk,q;double *pp;
+			c_loop_all vl(*this);
+			voronoicell c;
+			if(vl.start()) do if(compute_cell(c,vl)) {
+				ijk=vl.ijk;q=vl.q;pp=p[ijk]+ps*q;
+
+				/** Necessary data:
+				 * - %i				 	particle ID
+				 * - %x %y %z		particle position
+				 * - %s					number of faces in the voronoi cell
+				 * - %t					bracketed vertices that make up each face
+				 * - %p					vertices that make up the cell
+				 */
+				int i = id[ijk][q];
+				const float x = float(*pp);
+				const float y = float(pp[1]);
+				const float z = float(pp[2]);
+				const int n_faces = c.number_of_faces();
+
+				std::vector<float> verts(c.pts, c.pts + 3 * c.p);
+				std::transform(verts.begin(), verts.end(), verts.begin(), [](float& v){return v * 0.5;});
+
+				std::vector<int> fv;
+				c.face_vertices(fv);
+				std::vector<std::vector<int> > faces(n_faces);
+				int fvi = 0;
+				for(size_t fi = 0; fi < n_faces; ++fi) {
+					// The first entry is the size of the face
+					const size_t n_corners = fv.at(fvi++);
+					faces[fi].insert(faces[fi].end(), fv.begin() + fvi, fv.begin() + fvi + n_corners);
+					fvi += n_corners;
+				}
+
+				cells.push_back({i, x, y, z, n_faces, verts, faces});
+			} while(vl.inc());
 		}
 		/** Computes the Voronoi cells and saves customized information
 		 * about them.
