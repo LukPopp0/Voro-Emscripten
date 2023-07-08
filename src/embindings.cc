@@ -26,17 +26,11 @@ public:
 class Container {
 
 public:
-  int x_min = -10;
-  int x_max = -10;
-  int y_min = -10;
-  int y_max = -10;
-  int z_min = -10;
-  int z_max = -10;
-  int n_x = 1;
-  int n_y = 1;
-  int n_z = 1;
+  int x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z;
 
-  Container() {}
+  Container()
+      : x_min(-10), x_max(10), y_min(-10), y_max(10), z_min(-10), z_max(10),
+        n_x(1), n_y(1), n_z(1) {}
   Container(int x_min, int x_max, int y_min, int y_max, int z_min, int z_max,
             int n_x, int n_y, int n_z)
       : x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max), z_min(z_min),
