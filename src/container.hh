@@ -440,17 +440,14 @@ class container : public container_base, public radius_mono {
 				 * - %t					bracketed vertices that make up each face
 				 * - %p					vertices that make up the cell
 				 */
-				int i = id[ijk][q];
-				const float x = float(*pp);
-				const float y = float(pp[1]);
-				const float z = float(pp[2]);
-				const int n_faces = c.number_of_faces();
 
 				std::vector<float> verts(c.pts, c.pts + 3 * c.p);
 				std::transform(verts.begin(), verts.end(), verts.begin(), [](float& v){return v * 0.5;});
 
 				std::vector<int> fv;
 				c.face_vertices(fv);
+
+				const int n_faces = c.number_of_faces();
 				std::vector<std::vector<int> > faces(n_faces);
 				int fvi = 0;
 				for(size_t fi = 0; fi < n_faces; ++fi) {
@@ -460,7 +457,7 @@ class container : public container_base, public radius_mono {
 					fvi += n_corners;
 				}
 
-				cells.push_back({i, x, y, z, n_faces, verts, faces});
+				cells.push_back({id[ijk][q], float(*pp), float(pp[1]), float(pp[2]), n_faces, verts, faces});
 			} while(vl.inc());
 		}
 		/** Computes the Voronoi cells and saves customized information
