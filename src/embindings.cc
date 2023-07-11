@@ -36,7 +36,7 @@ public:
       : x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max), z_min(z_min),
         z_max(z_max), n_x(n_x), n_y(n_y), n_z(n_z) {}
 
-  void compute_cells(PointStorage points) {
+  std::vector<CellExport> compute_cells(PointStorage points) {
     const int init_mem = 8;
 
     voro::container con(x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z,
@@ -45,9 +45,6 @@ public:
     assert(points._data.size() % 3 == 0);
 
     for (int i = 0; i < int(points._data.size() / 3); ++i) {
-      std::cout << "Adding: " << points._data[i * 3 + 0] << " \t"
-                << points._data[i * 3 + 1] << " \t" << points._data[i * 3 + 2]
-                << std::endl;
       con.put(i, points._data[i * 3 + 0], points._data[i * 3 + 1],
               points._data[i * 3 + 2]);
     }
@@ -59,12 +56,24 @@ public:
     for (auto cell : cells) {
       std::cout << cell.particleID << " " << cell.nFaces << std::endl;
     }
+
+    return cells;
   }
 };
 
 #ifdef EMSCRIPTEN
 EMSCRIPTEN_BINDINGS(vorojs) {
   emscripten::register_vector<float>("VectorFloat");
+  emscripten::register_vector<CellExport>("VectorCellExport");
+  emscripten::class_<CellExport>("CellExport")
+      .constructor<>()
+      .property("particleID", &CellExport::particleID)
+      .property("x", &CellExport::x)
+      .property("y", &CellExport::y)
+      .property("z", &CellExport::z)
+      .property("nFaces", &CellExport::nFaces)
+      .property("vertices", &CellExport::vertices)
+      .property("faces", &CellExport::faces);
   emscripten::class_<PointStorage>("PointStorage")
       .constructor<>()
       .property("data", &PointStorage::_data)
@@ -86,9 +95,8 @@ EMSCRIPTEN_BINDINGS(vorojs) {
 }
 #endif
 
+#ifndef EMSCRIPTEN
 int main() {
-  std::cout << "Voro++ loaded." << std::endl;
-  #ifndef EMSCRIPTEN
   std::vector<float> points{0,
                             -4.99995,
                             0,
@@ -130,7 +138,7 @@ int main() {
   p.add_points(points);
   Container c = Container();
   c.compute_cells(p);
-  #endif
 
   return 0;
 }
+#endif
