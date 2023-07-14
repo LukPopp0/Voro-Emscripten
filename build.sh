@@ -2,7 +2,7 @@ mkdir -p bin
 emcc ./src/embindings.cc ./src/voro++.cc\
   --bind\
   -O1\
-  -o ./bin/voro.js\
+  -o ./bin/voro_raw.js\
   -I ./src\
   -s EXPORT_ES6=1\
   -s MODULARIZE=1\

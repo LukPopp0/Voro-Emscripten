@@ -53,10 +53,6 @@ public:
     std::vector<CellExport> cells;
     con.compute_cell_data(cells);
 
-    for (auto cell : cells) {
-      std::cout << cell.particleID << " " << cell.nFaces << std::endl;
-    }
-
     return cells;
   }
 };
@@ -64,6 +60,8 @@ public:
 #ifdef EMSCRIPTEN
 EMSCRIPTEN_BINDINGS(vorojs) {
   emscripten::register_vector<float>("VectorFloat");
+  emscripten::register_vector<int>("VectorInt");
+  emscripten::register_vector<std::vector<int>>("VectorVectorInt");
   emscripten::register_vector<CellExport>("VectorCellExport");
   emscripten::class_<CellExport>("CellExport")
       .constructor<>()

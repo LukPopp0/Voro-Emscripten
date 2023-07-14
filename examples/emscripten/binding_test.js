@@ -1,4 +1,4 @@
-import createVoro from "../../bin/voro.js";
+import createVoro from "../../bin/voro_raw.js";
 
 console.log("WebAssembly loaded!");
 
@@ -24,6 +24,15 @@ const pointStorage = new Voro.PointStorage();
 points.forEach((p) => pointStorage.addPoint(p[0], p[1], p[2]));
 const cells = container.computeCells(pointStorage);
 
-console.log({cells})
-console.log(cells.size());
-console.log(cells.get(0));
+console.log({ cells });
+console.log("Number of cells: ", cells.size());
+
+console.log("Faces of cell 0:");
+const c = cells.get(0);
+for (let i = 0; i < c.faces.size(); ++i) {
+  const f = c.faces.get(i);
+  console.log(`Face ${i} has ${f.size()} vertices.`);
+  for (let j = 0; j < f.size(); ++j) {
+    console.log(`Vertex ${f.get(j)}`);
+  }
+}

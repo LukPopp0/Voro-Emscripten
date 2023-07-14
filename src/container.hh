@@ -448,12 +448,12 @@ class container : public container_base, public radius_mono {
 				c.face_vertices(fv);
 
 				const int n_faces = c.number_of_faces();
-				std::vector<std::vector<int> > faces(n_faces);
+				std::vector<std::vector<int>> faces(n_faces);
 				int fvi = 0;
 				for(size_t fi = 0; fi < n_faces; ++fi) {
 					// The first entry is the size of the face
-					const size_t n_corners = fv.at(fvi++);
-					faces[fi].insert(faces[fi].end(), fv.begin() + fvi, fv.begin() + fvi + n_corners);
+					const int n_corners = fv.at(fvi++);
+					faces[fi].insert(faces[fi].begin(), fv.begin() + fvi, fv.begin() + fvi + n_corners);
 					fvi += n_corners;
 				}
 
