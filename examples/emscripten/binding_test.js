@@ -17,11 +17,15 @@ const points = [
   [1.974399169327309, 4.99995, 0.6252871464344901],
 ];
 
-const Voro = await createVoro();
+const VoroRaw = await createVoro();
 
-const container = new Voro.Container(-5, 5, -5, 5, -5, 5, 2, 2, 2);
-const pointStorage = new Voro.PointStorage();
-points.forEach((p) => pointStorage.addPoint(p[0], p[1], p[2]));
+const container = new VoroRaw.Container(-5, 5, -5, 5, -5, 5, 2, 2, 2);
+const pointStorage = new VoroRaw.VectorFloat();
+points.forEach((p) => {
+  pointStorage.push_back(p[0]);
+  pointStorage.push_back(p[1]);
+  pointStorage.push_back(p[2]);
+});
 const cells = container.computeCells(pointStorage);
 
 console.log({ cells });

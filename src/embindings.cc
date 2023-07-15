@@ -7,22 +7,6 @@
 #include <iostream>
 #include <vector>
 
-class PointStorage {
-public:
-  PointStorage() {}
-  ~PointStorage() { _data.clear(); }
-  std::vector<float> _data;
-  void add_point(float x, float y, float z) {
-    _data.push_back(x);
-    _data.push_back(y);
-    _data.push_back(z);
-  }
-
-  void add_points(std::vector<float> pts) {
-    _data.insert(_data.end(), pts.begin(), pts.end());
-  }
-};
-
 class Container {
 
 public:
@@ -36,17 +20,17 @@ public:
       : x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max), z_min(z_min),
         z_max(z_max), n_x(n_x), n_y(n_y), n_z(n_z) {}
 
-  std::vector<CellExport> compute_cells(PointStorage points) {
+  std::vector<CellExport> compute_cells(std::vector<float> points) {
     const int init_mem = 8;
 
     voro::container con(x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z,
                         false, false, false, init_mem);
 
-    assert(points._data.size() % 3 == 0);
+    assert(points.size() % 3 == 0);
 
-    for (int i = 0; i < int(points._data.size() / 3); ++i) {
-      con.put(i, points._data[i * 3 + 0], points._data[i * 3 + 1],
-              points._data[i * 3 + 2]);
+    for (int i = 0; i < int(points.size() / 3); ++i) {
+      con.put(i, points[i * 3 + 0], points[i * 3 + 1],
+              points[i * 3 + 2]);
     }
 
     // con.print_custom("%i | %q | %s | %t | %p", "output.txt");
@@ -72,11 +56,6 @@ EMSCRIPTEN_BINDINGS(vorojs) {
       .property("nFaces", &CellExport::nFaces)
       .property("vertices", &CellExport::vertices)
       .property("faces", &CellExport::faces);
-  emscripten::class_<PointStorage>("PointStorage")
-      .constructor<>()
-      .property("data", &PointStorage::_data)
-      .function("addPoint", &PointStorage::add_point)
-      .function("addPoints", &PointStorage::add_points);
   emscripten::class_<Container>("Container")
       .constructor<>()
       .constructor<int, int, int, int, int, int, int, int, int>()
@@ -132,10 +111,8 @@ int main() {
                             4.99995,
                             0.6252871464344901};
 
-  PointStorage p = PointStorage();
-  p.add_points(points);
   Container c = Container();
-  c.compute_cells(p);
+  c.compute_cells(points);
 
   return 0;
 }
