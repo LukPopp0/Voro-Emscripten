@@ -1,7 +1,5 @@
 import createVoro from "../../bin/voro_raw.js";
 
-console.log("WebAssembly loaded!");
-
 const points = [
   [0, -4.99995, 0],
   [-3.6899379709983346, -2.5739679448534636, -4.99995],
@@ -28,9 +26,8 @@ points.forEach((p) => {
 });
 const cells = container.computeCells(pointStorage);
 
-console.log({ cells });
+console.log("Calculated cells: ", { cells });
 console.log("Number of cells: ", cells.size());
-
 console.log("Faces of cell 0:");
 const c = cells.get(0);
 for (let i = 0; i < c.faces.size(); ++i) {
