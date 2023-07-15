@@ -15,6 +15,9 @@ src=$(patsubst %.o,%.cc,$(objs))
 # Makefile rules
 all: libvoro++.a voro++
 
+emscripten:
+	$(CXX) $(CFLAGS) -o embindings_test.o embindings.cc -lvoro++
+
 depend:
 	$(CXX) -MM $(src) >Makefile.dep
 
