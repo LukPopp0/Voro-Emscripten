@@ -1,3 +1,28 @@
+# Voro++ - Emscripten Bindings
+
+This project extends the existing [Voro++ library](https://math.lbl.gov/voro++/) by adding a simplified container class that is exposed to JavaScript via emscripten. It also adds one new function to the existing container class that computes the 3D voronoi cells in a more usable format.
+
+The WebAssembly and accompaning JavaScript file can be compiled via build shell script `build.sh` in the root directory. As a prerequisite, the emscripten SDK needs to be installed and added to your PATH. See [here](https://emscripten.org/docs/getting_started/downloads.html) for more information.
+
+Compile the emscripten bindings by running:
+```shell
+# Mac & Linux
+./build.sh
+```
+or
+```shell
+# Windows
+bash build.sh
+```
+
+You can test the compiled files by running the binding test in `binding_test.js`. Start a simple python server (`python -m http.server`) and open [`http://localhost:8000/examples/emscripten/binding_test.html`](http://localhost:8000/examples/emscripten/binding_test.html) in the browser. You can see the output of the calculated cells in the console.
+
+The compiled WebAssembly file is also used in my [voro3d project](https://github.com/LukPopp0/voro3d). This is the recommended usage as the output is more web-friendly and adds TypeScript support.
+
+Below you can find the original readme of Voro++.
+
+------------
+
 Voro++, a 3D cell-based Voronoi library (http://math.lbl.gov/voro++/)
 By Chris H. Rycroft (UC Berkeley / Lawrence Berkeley Laboratory)
 ================================================================
