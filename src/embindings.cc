@@ -26,8 +26,6 @@ public:
     voro::container con(x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z,
                         false, false, false, init_mem);
 
-    assert(points.size() % 3 == 0);
-
     for (int i = 0; i < int(points.size() / 3); ++i) {
       con.put(i, points[i * 3 + 0], points[i * 3 + 1],
               points[i * 3 + 2]);
@@ -112,7 +110,24 @@ int main() {
                             0.6252871464344901};
 
   Container c = Container();
-  c.compute_cells(points);
+  std::vector<CellExport> cells = c.compute_cells(points);
+  for(auto c: cells) {
+    std::cout << "# cell id " << c.particleID << std::endl;
+    for(size_t vi = 0; vi < c.vertices.size(); vi += 3) {
+      std::cout << "v " << c.vertices[vi] << " " << c.vertices[vi + 1] << " " << c.vertices[vi + 2] << std::endl;
+    }
+    for(auto f: c.faces) {
+      // std::cout << "f ";
+      // for(auto v: f) std::cout << v << " ";
+      // std::cout << std::endl;
+      for(size_t fvi = 1; fvi < f.size() - 1; ++fvi)
+        std::cout << "f " << f[0] << " " << f[fvi] << " " << f[fvi + 1] << std::endl;
+    }
+    std::cout << "==============" << std::endl;
+  }
+  // cells[ci].faces.forEach((f) => {
+  //   for (let ti = 1; ti < f.length - 1; ti++) txt += `f ${f[0]} ${f[ti]} ${f[ti + 1]}\n`;
+  // });
 
   return 0;
 }
