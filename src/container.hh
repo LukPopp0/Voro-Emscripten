@@ -433,16 +433,11 @@ class container : public container_base, public radius_mono {
 			if(vl.start()) do if(compute_cell(c,vl)) {
 				ijk=vl.ijk;q=vl.q;pp=p[ijk]+ps*q;
 
-				/** Necessary data:
-				 * - %i				 	particle ID
-				 * - %x %y %z		particle position
-				 * - %s					number of faces in the voronoi cell
-				 * - %t					bracketed vertices that make up each face
-				 * - %p					vertices that make up the cell
-				 */
-
 				std::vector<float> verts(c.pts, c.pts + 3 * c.p);
 				std::transform(verts.begin(), verts.end(), verts.begin(), [](float& v){return v * 0.5;});
+				for(size_t vi = 0; vi < verts.size(); vi += 3) {
+					verts[vi]+=float(*pp);verts[vi+1]+=float(pp[1]);verts[vi+2]+=float(pp[2]);
+				}
 
 				std::vector<int> fv;
 				c.face_vertices(fv);
