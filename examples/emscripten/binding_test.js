@@ -24,7 +24,7 @@ points.forEach((p) => {
   pointStorage.push_back(p[1]);
   pointStorage.push_back(p[2]);
 });
-const cells = container.computeCells(pointStorage);
+const cells = container.computeCells(pointStorage, true);
 
 console.log("Calculated cells: ", { cells });
 console.log("Number of cells: ", cells.size());

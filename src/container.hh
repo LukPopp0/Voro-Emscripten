@@ -426,7 +426,7 @@ class container : public container_base, public radius_mono {
 			fclose(fp);
 		}
 		/** Computes the cell data and return it as a list of cells. */
-		void compute_cell_data(std::vector<CellExport>& cells) {
+		void compute_cell_data(std::vector<CellExport>& cells, bool convertToWorld) {
 			int ijk,q;double *pp;
 			c_loop_all vl(*this);
 			voronoicell c;
@@ -435,8 +435,10 @@ class container : public container_base, public radius_mono {
 
 				std::vector<float> verts(c.pts, c.pts + 3 * c.p);
 				std::transform(verts.begin(), verts.end(), verts.begin(), [](float& v){return v * 0.5;});
-				for(size_t vi = 0; vi < verts.size(); vi += 3) {
-					verts[vi]+=float(*pp);verts[vi+1]+=float(pp[1]);verts[vi+2]+=float(pp[2]);
+				if(convertToWorld) {
+					for(size_t vi = 0; vi < verts.size(); vi += 3) {
+						verts[vi]+=float(*pp);verts[vi+1]+=float(pp[1]);verts[vi+2]+=float(pp[2]);
+					}
 				}
 
 				std::vector<int> fv;

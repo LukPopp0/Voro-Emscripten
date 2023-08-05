@@ -21,7 +21,7 @@ public:
       : x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max), z_min(z_min),
         z_max(z_max), n_x(n_x), n_y(n_y), n_z(n_z) {}
 
-  std::vector<CellExport> compute_cells(std::vector<float> points) {
+  std::vector<CellExport> compute_cells(std::vector<float> points, bool convertToWorld = false) {
     const int init_mem = 8;
 
     voro::container con(x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z,
@@ -34,7 +34,7 @@ public:
 
     // con.print_custom("%i | %q | %s | %t | %p", "output.txt");
     std::vector<CellExport> cells;
-    con.compute_cell_data(cells);
+    con.compute_cell_data(cells, convertToWorld);
 
     return cells;
   }
@@ -111,7 +111,7 @@ int main() {
                             0.6252871464344901};
 
   Container c = Container(-5, 5, -5, 5, -5, 5, 2, 2, 2);
-  std::vector<CellExport> cells = c.compute_cells(points);
+  std::vector<CellExport> cells = c.compute_cells(points, true);
   for(auto c: cells) {
     std::cout << "# cell id " << c.particleID << std::endl;
     std::cout << "# particle: " << c.x << " " << c.y << " " << c.z << std::endl;
@@ -119,17 +119,11 @@ int main() {
       std::cout << "v " << c.vertices[vi] << " " << c.vertices[vi + 1] << " " << c.vertices[vi + 2] << std::endl;
     }
     for(auto f: c.faces) {
-      // std::cout << "f ";
-      // for(auto v: f) std::cout << v << " ";
-      // std::cout << std::endl;
       for(size_t fvi = 1; fvi < f.size() - 1; ++fvi)
         std::cout << "f " << f[0] + 1 << " " << f[fvi] + 1 << " " << f[fvi + 1] + 1 << std::endl;
     }
     std::cout << "==============" << std::endl;
   }
-  // cells[ci].faces.forEach((f) => {
-  //   for (let ti = 1; ti < f.length - 1; ti++) txt += `f ${f[0]} ${f[ti]} ${f[ti + 1]}\n`;
-  // });
 
   return 0;
 }
