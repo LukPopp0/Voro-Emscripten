@@ -10,12 +10,13 @@
 class Container {
 
 public:
-  int x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z;
+  float x_min, x_max, y_min, y_max, z_min, z_max;
+  int n_x, n_y, n_z;
 
   Container()
       : x_min(-10), x_max(10), y_min(-10), y_max(10), z_min(-10), z_max(10),
         n_x(1), n_y(1), n_z(1) {}
-  Container(int x_min, int x_max, int y_min, int y_max, int z_min, int z_max,
+  Container(float x_min, float x_max, float y_min, float y_max, float z_min, float z_max,
             int n_x, int n_y, int n_z)
       : x_min(x_min), x_max(x_max), y_min(y_min), y_max(y_max), z_min(z_min),
         z_max(z_max), n_x(n_x), n_y(n_y), n_z(n_z) {}
@@ -56,7 +57,7 @@ EMSCRIPTEN_BINDINGS(vorojs) {
       .property("faces", &CellExport::faces);
   emscripten::class_<Container>("Container")
       .constructor<>()
-      .constructor<int, int, int, int, int, int, int, int, int>()
+      .constructor<float, float, float, float, float, float, int, int, int>()
       .property("xMin", &Container::x_min)
       .property("xMax", &Container::x_max)
       .property("yMin", &Container::y_min)
@@ -109,10 +110,11 @@ int main() {
                             4.99995,
                             0.6252871464344901};
 
-  Container c = Container();
+  Container c = Container(-5, 5, -5, 5, -5, 5, 2, 2, 2);
   std::vector<CellExport> cells = c.compute_cells(points);
   for(auto c: cells) {
     std::cout << "# cell id " << c.particleID << std::endl;
+    std::cout << "# particle: " << c.x << " " << c.y << " " << c.z << std::endl;
     for(size_t vi = 0; vi < c.vertices.size(); vi += 3) {
       std::cout << "v " << c.vertices[vi] << " " << c.vertices[vi + 1] << " " << c.vertices[vi + 2] << std::endl;
     }
@@ -121,7 +123,7 @@ int main() {
       // for(auto v: f) std::cout << v << " ";
       // std::cout << std::endl;
       for(size_t fvi = 1; fvi < f.size() - 1; ++fvi)
-        std::cout << "f " << f[0] << " " << f[fvi] << " " << f[fvi + 1] << std::endl;
+        std::cout << "f " << f[0] + 1 << " " << f[fvi] + 1 << " " << f[fvi + 1] + 1 << std::endl;
     }
     std::cout << "==============" << std::endl;
   }
