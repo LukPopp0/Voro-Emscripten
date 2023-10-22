@@ -4,7 +4,7 @@ This project extends the existing [Voro++ library](https://math.lbl.gov/voro++/)
 
 The WebAssembly and accompaning JavaScript file can be compiled via build shell script `build.sh` in the root directory. As a prerequisite, the emscripten SDK needs to be installed and added to your PATH. See [here](https://emscripten.org/docs/getting_started/downloads.html) for more information.
 
-Compile the emscripten bindings by running:
+The build script has been tested with emscripten version `3.1.47` (allows export of TypeScript definition file). Compile the emscripten bindings by running:
 ```shell
 # Mac & Linux
 ./build.sh
