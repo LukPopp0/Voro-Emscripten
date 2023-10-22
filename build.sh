@@ -1,9 +1,14 @@
 mkdir -p bin
-emcc ./src/embindings.cc ./src/voro++.cc\
-  --bind\
-  -Os\
-  -o ./bin/voro_raw.js\
+emcc\
   -I ./src\
-  -s EXPORT_ES6=1\
+  -l embind\
   -s MODULARIZE=1\
-  -s 'EXPORT_NAME="voro"'
+  -s EXPORT_ES6=1\
+  -s 'EXPORT_NAME="voro"'\
+  -s ASSERTIONS=1\
+  -s TOTAL_MEMORY=256MB\
+  -s ALLOW_MEMORY_GROWTH=1\
+  -Os\
+  --embind-emit-tsd ./voro_raw.d.ts\
+  -o ./bin/voro_raw.js\
+  ./src/embindings.cc ./src/voro++.cc
