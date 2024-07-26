@@ -18,9 +18,7 @@ jobs:
 
       - name: Linux - Build Base Binary
         if: runner.os == 'Linux'
-        run: |
-          mkdir bin
-          ./build.sh
+        run: ./build.sh
 
       - name: Linux - Upload Build
         uses: actions/upload-artifact@v4
