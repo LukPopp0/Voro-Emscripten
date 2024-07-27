@@ -9,4 +9,5 @@ struct CellExport {
   int nFaces;
   std::vector<float> vertices;
   std::vector<std::vector<int>> faces;
+  std::vector<int> neighbors;
 };
