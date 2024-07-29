@@ -429,7 +429,7 @@ class container : public container_base, public radius_mono {
 		void compute_cell_data(std::vector<CellExport>& cells, bool convertToWorld) {
 			int ijk,q;double *pp;
 			c_loop_all vl(*this);
-			voronoicell c;
+			voronoicell_neighbor c;
 			if(vl.start()) do if(compute_cell(c,vl)) {
 				ijk=vl.ijk;q=vl.q;pp=p[ijk]+ps*q;
 
@@ -454,7 +454,10 @@ class container : public container_base, public radius_mono {
 					fvi += n_corners;
 				}
 
-				cells.push_back({id[ijk][q], float(*pp), float(pp[1]), float(pp[2]), n_faces, verts, faces});
+				std::vector<int> neighbors;
+				c.neighbors(neighbors);
+
+				cells.push_back({id[ijk][q], float(*pp), float(pp[1]), float(pp[2]), n_faces, verts, faces, neighbors});
 			} while(vl.inc());
 		}
 		/** Computes the Voronoi cells and saves customized information

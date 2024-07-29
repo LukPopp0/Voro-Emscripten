@@ -54,7 +54,8 @@ EMSCRIPTEN_BINDINGS(vorojs) {
       .property("z", &CellExport::z)
       .property("nFaces", &CellExport::nFaces)
       .property("vertices", &CellExport::vertices)
-      .property("faces", &CellExport::faces);
+      .property("faces", &CellExport::faces)
+      .property("neighbors", &CellExport::neighbors);
   emscripten::class_<Container>("Container")
       .constructor<>()
       .constructor<float, float, float, float, float, float, int, int, int>()

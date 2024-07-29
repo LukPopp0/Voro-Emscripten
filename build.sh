@@ -9,6 +9,6 @@ emcc\
   -s TOTAL_MEMORY=256MB\
   -s ALLOW_MEMORY_GROWTH=1\
   -Os\
-  --embind-emit-tsd ./voro_raw.d.ts\
+  --emit-tsd ./voro_raw.d.ts\
   -o ./bin/voro_raw.js\
   ./src/embindings.cc ./src/voro++.cc
