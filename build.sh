@@ -6,7 +6,7 @@ emcc\
   -s EXPORT_ES6=1\
   -s 'EXPORT_NAME="voro"'\
   -s ASSERTIONS=1\
-  -s TOTAL_MEMORY=256MB\
+  -s MAXIMUM_MEMORY=4GB\
   -s ALLOW_MEMORY_GROWTH=1\
   -Os\
   --emit-tsd ./voro_raw.d.ts\
